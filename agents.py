@@ -110,3 +110,76 @@ def scout_node(state: AgentState) -> AgentState:
     state["scout_brief"] = str(scout_brief)
     return state
 
+def strategist_node(state: AgentState) -> AgentState:
+    """
+    The second agent in the workflow. It creates a marketing strategy.
+
+    This node performs the following steps:
+    1.  Reads the `scout_brief` and `cafe_context` from the state.
+    2.  Creates a detailed prompt that instructs the LLM to act as a marketing strategist.
+    3.  The prompt forces the LLM to use the cafe's strategic playbook to connect an
+        opportunity from the brief to a specific menu item or goal.
+    4.  Invokes the LLM to generate a single, actionable instruction for the content creator.
+    5.  Updates the `strategist_instruction` in the agent state.
+
+    Args:
+        state (AgentState): The current state of the workflow.
+
+    Returns:
+        AgentState: The updated state with the new strategist_instruction.
+    """
+    print("--- AGENT: STRATEGIST ---")
+
+    # 1. Read the necessary data from the state
+    scout_brief = state["scout_brief"]
+    cafe_context = state["cafe_context"]
+
+    # This check is a safeguard. The scout_brief should always be present.
+    if scout_brief is None:
+        state["errors"].append("Scout brief is missing.")
+        return state
+
+    # 2. Create the detailed prompt for the LLM
+    # This is the core of the strategist's logic.
+    prompt = f"""
+    You are the expert Marketing Strategist for a small cafe called "The Daily Grind".
+
+    Your task is to analyze the "Daily Opportunities Brief" and the "Cafe's Marketing Playbook"
+    to create a single, clear, and actionable instruction for the Social Media Content Creator.
+
+    **Instructions:**
+    1.  **Analyze the Inputs:** Carefully review the opportunities in the brief and the rules and menu in the playbook.
+    2.  **Find the Best Connection:** Identify the single best marketing opportunity for the day. Use the rules in the playbook to guide your decision (e.g., if it's sunny, the playbook says to promote a `[cold drink]`).
+    3.  **Formulate the Instruction:** Your output MUST be a single, direct instruction for the Content Creator.
+        -   It should state WHICH product to promote.
+        -   It should state WHY (the hook from the brief).
+        -   It may include extra details like mentioning the patio or a specific hashtag.
+    4.  **Constraint:** Do NOT write the social media post yourself. Your ONLY job is to provide the creative direction for the next step.
+
+    **Example Output:**
+    "Instruction: Create a post promoting our `[cold drink]` selection, specifically the Pistachio Iced Latte. The hook is the warm, sunny weather, so emphasize its refreshing quality and mention our sunny patio."
+
+    ---
+
+    ### Input 1: Daily Opportunities Brief
+    {scout_brief}
+
+    ---
+
+    ### Input 2: Cafe's Marketing Playbook & Context
+    {cafe_context}
+
+    ---
+
+    Now, based on all the information above, generate the single, actionable instruction for the Content Creator.
+    """
+
+    # 4. Invoke the LLM
+    response = llm.invoke(prompt)
+    instruction = response.content
+
+    print(f"Strategist Instruction:\n{instruction}")
+
+    # 5. Update the state
+    state["strategist_instruction"] = str(instruction)
+    return state
