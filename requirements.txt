@@ -1,0 +1,21 @@
+# Core LangChain/LangGraph
+langchain
+langgraph
+langchain-openai
+
+# LLM Provider
+openai
+
+# UI
+streamlit
+
+# Utilities
+python-dotenv
+feedparser
+requests
+
+# API Tools
+google-search-results
+
+# Visualization
+pygraphviz

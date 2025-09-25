@@ -1,0 +1,6 @@
+.fake
+target/
+venv/
+.env
+GEMINI.md
+Project_description.md
