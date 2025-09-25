@@ -5,6 +5,7 @@ Each function takes the current agent state and returns an updated state.
 """
 
 import os
+import json
 from langchain_openai import ChatOpenAI
 
 # Import state and tools
@@ -182,4 +183,117 @@ def strategist_node(state: AgentState) -> AgentState:
 
     # 5. Update the state
     state["strategist_instruction"] = str(instruction)
+    return state
+
+def creator_node(state: AgentState) -> AgentState:
+    """
+    The final agent in the workflow. It creates the social media post.
+
+    This node implements a "self-correction" loop using a multi-step prompt.
+    1.  Reads the `strategist_instruction` and `cafe_context` from the state.
+    2.  Creates a sophisticated prompt that instructs the LLM to:
+        a. Generate a first draft of the social media post.
+        b. Critique its own draft against a defined checklist.
+        c. Write a final, revised version based on the critique.
+    3.  The final output is formatted as a JSON object with 'caption' and 'image_prompt'.
+    4.  Invokes the LLM and parses its response.
+    5.  Updates the `final_social_post` in the agent state.
+
+    Args:
+        state (AgentState): The current state of the workflow.
+
+    Returns:
+        AgentState: The updated state with the final social media post.
+    """
+    print("--- AGENT: CREATOR ---")
+
+    # 1. Read the necessary data from the state
+    strategist_instruction = state["strategist_instruction"]
+    cafe_context = state["cafe_context"]
+
+    # Safety check
+    if strategist_instruction is None:
+        state["errors"].append("Strategist instruction is missing.")
+        return state
+
+    # 2. Create the detailed, multi-step prompt for the LLM
+    prompt = f"""
+    You are an expert social media manager for a small, cozy cafe called "The Daily Grind".
+    Your task is to create a complete social media post based on a creative instruction.
+
+    You will follow a precise, three-step process:
+    1.  **DRAFT:** Write an initial draft of the post caption.
+    2.  **CRITIQUE:** Critically evaluate your own draft against the cafe's brand guidelines.
+    3.  **REVISE:** Create the final, polished post content as a JSON object.
+
+    ---
+    ### INPUTS:
+
+    **1. Creative Instruction:**
+    "{strategist_instruction}"
+
+    **2. Cafe Context & Brand Voice:**
+    "{cafe_context}"
+
+    ---
+    ### PROCESS:
+
+    **Step 1: DRAFT**
+    Based on the Creative Instruction and Brand Voice, write the first draft of the social media caption.
+    ---
+
+    **Step 2: CRITIQUE**
+    Now, review your draft. Be harsh. Answer the following questions about your draft:
+    -   Does it sound like it's from a "cozy, artisanal, friendly" cafe? (Yes/No)
+    -   Is there a clear and engaging hook in the first sentence? (Yes/No)
+    -   Is there a clear call-to-action (e.g., asking a question, inviting them to visit)? (Yes/No)
+    -   Are the emojis appropriate and not overused? (Yes/No)
+    -   Briefly state what could be improved.
+    ---
+
+    **Step 3: REVISE**
+    Based on your critique, create the final, complete social media post.
+    Your final output MUST be a single JSON object containing two keys:
+    1.  `caption`: The final, polished text for the social media post. Include relevant hashtags.
+    2.  `image_prompt`: A descriptive prompt for an AI image generator (like Midjourney or DALL-E) to create a beautiful, on-brand photo for this post. The prompt should be detailed, focusing on a rustic-modern, cozy aesthetic.
+
+    **Example JSON Output:**
+    ```json
+    {{
+        "caption": "The sun is shining and our patio is calling! ☀️ Cool down with our refreshing Cold Brew. The perfect way to enjoy this beautiful Glasgow afternoon! #TheDailyGrind #GlasgowCafe #SunnyDays #ColdBrew",
+        "image_prompt": "A beautiful close-up shot of a glass of iced cold brew coffee sitting on a rustic wooden table on a sunny cafe patio. The background is slightly blurred, showing green plants and a cozy chair. Golden hour lighting, food photography, hyper-realistic."
+    }}
+    ```
+
+    Now, begin the process.
+    """
+
+    # 4. Invoke the LLM
+    response = llm.invoke(prompt)
+    
+    try:
+        # The LLM's response content is a string that often includes ```json ... ```
+        # We need to extract the JSON part cleanly.
+        content = str(response.content)
+        
+        # Find the start and end of the JSON object
+        json_start_index = content.find('{')
+        json_end_index = content.rfind('}')
+        
+        if json_start_index != -1 and json_end_index != -1:
+            json_response_string = content[json_start_index:json_end_index+1]
+            final_post = json.loads(json_response_string)
+            
+            print(f"Creator Output:\n{final_post}")
+
+            # 5. Update the state
+            state["final_social_post"] = final_post
+        else:
+            raise ValueError("No JSON object found in the LLM response.")
+
+    except (ValueError, json.JSONDecodeError) as e:
+        error_message = f"Error parsing JSON from creator_node: {e}\nLLM Response:\n{response.content}"
+        print(error_message)
+        state["errors"].append(error_message)
+
     return state
