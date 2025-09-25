@@ -4,3 +4,4 @@ venv/
 .env
 GEMINI.md
 Project_description.md
+.aiexclude
