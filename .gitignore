@@ -5,3 +5,5 @@ venv/
 GEMINI.md
 Project_description.md
 .aiexclude
+screenshots/
+__pycache__/*
