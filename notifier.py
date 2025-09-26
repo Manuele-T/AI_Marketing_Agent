@@ -56,7 +56,7 @@ def send_to_discord(state: Dict[str, Any]) -> None:
             },
             {
                 "title": "Top 5 Events",
-                "description": "\n".join([f"- {event}" for event in events]) if events else "*No events were found.*",
+                "description": "\n".join([f"- {event['title']} (Postcode: {event['postcode']})" if event['postcode'] != 'Not found' else f"- {event['title']}" for event in events]) if events else "*No events were found.*",
                 "color": 3447003 # A vibrant green color
             },
             {

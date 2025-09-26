@@ -78,24 +78,24 @@ def scout_node(state: AgentState) -> AgentState:
     prompt = f"""
     You are an expert Local Opportunity Scout for a small, cozy cafe in Glasgow called "Kahawa Mzuri".
 
-    Your mission is to analyze the raw data provided below and extract the weather summary and the top 5 most important events of the day.
+    Your mission is to analyze the raw data provided below and extract the weather summary and the top 5 most important events of the day, including their postcodes.
 
     **Instructions:**
     1.  **Analyze the Data:** Carefully read through the weather, event search results, and news headlines.
     2.  **Extract Weather:** Summarize the weather in a single sentence.
-    3.  **Extract Events:** Identify the top 5 most important events of the day. List their titles.
-    4.  **Format Output:** Your final output must be a JSON object with two keys: 'weather_summary' and 'events'.
+    3.  **Extract Events:** Identify the top 5 most important events of the day. For each event, provide its title and postcode. If a postcode is not available, use "Not found".
+    4.  **Format Output:** Your final output must be a JSON object with two keys: 'weather_summary' and 'events'. The 'events' key should contain a list of objects, each with a 'title' and 'postcode' key.
 
     **Example Output:**
     ```json
     {{
         "weather_summary": "Today in Glasgow is bright and mild with a lively social scene beginning.",
         "events": [
-            "Glasgow Cocktail Fortnight starts today, featuring masterclasses and activities at top city bars.",
-            "Glasgow Necropolis is set to receive a new east end entrance following recent funding approval.",
-            "Event 3",
-            "Event 4",
-            "Event 5"
+            {{"title": "Glasgow Cocktail Fortnight starts today, featuring masterclasses and activities at top city bars.", "postcode": "G1 1-G2 1"}},
+            {{"title": "Glasgow Necropolis is set to receive a new east end entrance following recent funding approval.", "postcode": "G4 0F"}},
+            {{"title": "Event 3", "postcode": "Not found"}},
+            {{"title": "Event 4", "postcode": "G12 8"}},
+            {{"title": "Event 5", "postcode": "G3 8YW"}}
         ]
     }}
     ```
@@ -196,7 +196,7 @@ def strategist_node(state: AgentState) -> AgentState:
     {weather_summary}
 
     ### Input 2: Top 5 Events
-    {events}
+    {json.dumps(events, indent=2)}
 
     ### Input 3: Cafe's Marketing Playbook & Context
     {cafe_context}
