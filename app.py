@@ -62,6 +62,8 @@ def run_workflow():
         print("Final post generated successfully.")
         # 5. Call the notifier to send the post to Discord
         send_to_discord(final_state)
+    
+    return final_state
 
 # This allows us to run the workflow directly from the terminal
 # for testing purposes before we build the UI.
