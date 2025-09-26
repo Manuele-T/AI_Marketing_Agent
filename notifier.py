@@ -15,13 +15,13 @@ from typing import Dict, Any
 # Load environment variables from the .env file in the project root
 load_dotenv()
 
-def send_to_discord(post_content: Dict[str, Any]) -> None:
+def send_to_discord(state: Dict[str, Any]) -> None:
     """
     Sends the generated social media post to a Discord channel using a webhook.
 
     Args:
-        post_content (Dict[str, Any]):
-            A dictionary expected to contain 'caption' and 'image_prompt' keys.
+        state (Dict[str, Any]):
+            A dictionary expected to contain 'weather_summary', 'food_recommendation', 'events', and 'message_ideas' keys.
     """
     webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
 
@@ -31,24 +31,38 @@ def send_to_discord(post_content: Dict[str, Any]) -> None:
         return
 
     # 2. Validate the input content
-    if not post_content or not isinstance(post_content, dict) or "caption" not in post_content:
-        print("ERROR: Post content is invalid or missing a 'caption'. Cannot send notification.")
+    if not state or not isinstance(state, dict):
+        print("ERROR: State is invalid. Cannot send notification.")
         return
 
+    weather_summary = state.get("weather_summary", "*No weather summary was generated.*")
+    food_recommendation = state.get("food_recommendation", "*No food recommendation was generated.*")
+    events = state.get("events", [])
+    message_ideas = state.get("message_ideas", [])
+
     # 3. Format the data for Discord's embed structure for a clean look
-    # Hex color codes are used for the vertical bar on the side of the embed.
     data = {
-        "content": "✨ **New Social Media Post Ready for Review** ✨",
+        "content": "✨ **New Social Media Post Ideas Ready for Review** ✨",
         "embeds": [
             {
-                "title": "Post Caption",
-                "description": post_content.get("caption", "*No caption was generated.*"),
+                "title": "Weather Summary",
+                "description": weather_summary,
                 "color": 5814783  # A pleasant blue color
             },
             {
-                "title": "AI Image Prompt",
-                "description": post_content.get("image_prompt", "*No image prompt was generated.*"),
+                "title": "Food Recommendation",
+                "description": food_recommendation,
                 "color": 15258703  # A warm orange color
+            },
+            {
+                "title": "Top 5 Events",
+                "description": "\n".join([f"- {event}" for event in events]) if events else "*No events were found.*",
+                "color": 3447003 # A vibrant green color
+            },
+            {
+                "title": "Message Ideas",
+                "description": "\n".join([f"- {idea}" for idea in message_ideas]) if message_ideas else "*No message ideas were generated.*",
+                "color": 10181046 # A deep purple color
             }
         ]
     }

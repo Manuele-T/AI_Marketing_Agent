@@ -10,13 +10,17 @@ class AgentState(TypedDict):
 
     Attributes:
         cafe_context: The content of the cafe_context.md file.
-        scout_brief: A summary of local opportunities (weather, events).
-        strategist_instruction: A specific instruction for the Content Creator.
+        weather_summary: A summary of the weather for the day.
+        food_recommendation: A food recommendation based on the weather.
+        events: A list of the top 5 events of the day.
+        message_ideas: A list of 5 message ideas, one for each event.
         final_social_post: The final, ready-to-publish social media post.
         errors: A list to accumulate any errors that occur during the workflow.
     """
     cafe_context: str
-    scout_brief: Optional[str]
-    strategist_instruction: Optional[str]
+    weather_summary: Optional[str]
+    food_recommendation: Optional[str]
+    events: Optional[List[str]]
+    message_ideas: Optional[List[str]]
     final_social_post: Optional[dict]
     errors: List[str]

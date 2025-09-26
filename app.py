@@ -31,8 +31,10 @@ def run_workflow():
     # This is the input that kicks off the graph.
     initial_state = AgentState(
         cafe_context=cafe_context,
-        scout_brief=None,
-        strategist_instruction=None,
+        weather_summary=None,
+        food_recommendation=None,
+        events=None,
+        message_ideas=None,
         final_social_post=None,
         errors=[]
     )
@@ -51,18 +53,15 @@ def run_workflow():
         print("❌ Workflow failed to return a final state.")
         return
 
-    final_post = final_state.get("final_social_post")
-    if final_post:
+    errors = final_state.get("errors", [])
+    if errors:
+        print("\nErrors encountered:")
+        for error in errors:
+            print(f"- {error}")
+    else:
         print("Final post generated successfully.")
         # 5. Call the notifier to send the post to Discord
-        send_to_discord(final_post)
-    else:
-        print("Workflow finished with no final post.")
-        errors = final_state.get("errors", [])
-        if errors:
-            print("\nErrors encountered:")
-            for error in errors:
-                print(f"- {error}")
+        send_to_discord(final_state)
 
 # This allows us to run the workflow directly from the terminal
 # for testing purposes before we build the UI.

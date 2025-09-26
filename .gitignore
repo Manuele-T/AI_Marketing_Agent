@@ -7,3 +7,4 @@ Project_description.md
 .aiexclude
 screenshots/
 __pycache__/*
+workflow_graph.png
