@@ -4,7 +4,7 @@
 Glasgow Cozy Bean
 
 ### Brand Voice
-Cozy, artisanal, friendly, welcoming. We are the town's favorite corner for a quiet moment or a friendly chat. Our vibe is rustic-modern with comfortable seating and a small, sunny patio. We focus on high-quality, locally-sourced ingredients where possible.
+Cozy, artisanal, friendly, welcoming. We are the town's favorite corner for a quiet moment or a friendly chat. Our vibe is rustic-modern with comfortable seating and a small, sunny patio. We focus on locally-sourced, high-quality ingredients where possible.
 
 ### Menu (with item characteristics)
 

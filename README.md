@@ -2,11 +2,10 @@
 
 ![First screenshot](./screenshots/01.jpg)
 
-
+-----
 A **multi-agent AI application** that functions as an autonomous marketing assistant for small businesses, such as local cafes, tackling the daily challenge of creating timely, relevant, and on-brand social media content. Built with **LangGraph** and the **OpenAI API**, this system orchestrates a virtual marketing team of specialized AI agents to deliver a rich, actionable brief every day.
 
 ---
-
 ### The Three-Agent Workflow
 
 The system transforms a complex, time-consuming creative task into a one-click process, delivering a set of customized and strategically aligned marketing ideas directly to the business owner.
@@ -27,24 +26,22 @@ The system transforms a complex, time-consuming creative task into a one-click p
 * **Output**: A comprehensive **Daily Marketing Brief**, complete with:
     * One fully-formed post based on the day's **weather**.
     * Five distinct, **actionable post ideas** for the most relevant local events.
-
+-----
 ![Third screenshot](./screenshots/03.jpg)
 
 -----
-
 ## Features
 
   * **Autonomous Opportunity Scouting**: Scans daily **weather forecasts**, **local news** via RSS, and multiple **Google Search** queries for relevant events to identify marketing "hooks."
   * **Strategic Content Generation**: Cross-references opportunities with a user-editable "**Marketing Playbook**" (`cafe_context.md`) to create strategically aligned content.
   * **Multi-Option Briefing**: Produces a **daily marketing brief** with multiple, ready-to-use post ideas: one tailored to the weather and several unique ideas for local events.
-  * **Simple Web Interface**: Built with **Streamlit** for easy interaction, allowing the user to edit the marketing playbook, trigger the workflow, and view results.
+  * **Interactive UI & Live Playbook Editing**: The Streamlit interface allows the user to not only trigger the workflow and view results but also to live-edit the Marketing Playbook. Changes made in the UI are saved directly to the cafe_context.md file, empowering the user to instantly update the AI's strategy without touching any code.
   * **Automated Discord Notifications**: Sends the final, gracefully formatted brief directly to a **Discord channel** for easy review and approval.
 
 -----
-
 ![Fourth screenshot](./screenshots/04.jpg)
 
-
+-----
 ## Tech Stack & Tools
 
 ### AI & Orchestration
@@ -80,7 +77,6 @@ The system transforms a complex, time-consuming creative task into a one-click p
 | **Graphviz** | To generate a visual representation of the agent workflow. |
 
 -----
-
 ## Prerequisites
 
 You will need the following to run the project locally:
@@ -94,7 +90,6 @@ You will need the following to run the project locally:
   * A **Discord Webhook URL**
 
 -----
-
 ## Getting Started
 
 Follow these instructions to get a local copy of the project up and running.
@@ -156,7 +151,6 @@ Open your browser and navigate to the local URL provided by Streamlit, typically
 `http://localhost:8501`
 
 -----
-
 ## Project Structure
 
 The project is organized into modular, single-responsibility files:
@@ -167,7 +161,7 @@ ai-marketing-agent/
 ├── .gitignore            # Specifies files to ignore for Git
 ├── README.md             # This file
 ├── requirements.txt      # Project dependencies for pip
-├── agents.py             # Contains the core agent logic (Scout, Strategist)
+├── agents.py             # Contains the core agent logic (Scout, Strategist, Creator)
 ├── app.py                # Main application runner that invokes the graph
 ├── cafe_context.md       # The user-editable marketing playbook
 ├── graph.py              # Defines and compiles the LangGraph workflow

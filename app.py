@@ -15,19 +15,11 @@ from graph import app
 from state import AgentState
 from notifier import send_to_discord
 
-def run_workflow():
+def run_workflow(cafe_context: str):
     """
-    Loads context, defines initial state, and runs the agent workflow.
+    Defines initial state and runs the agent workflow using the provided context.
     """
-    # 1. Load the cafe context from the file
-    try:
-        with open("cafe_context.md", "r", encoding="utf-8") as f:
-            cafe_context = f.read()
-    except FileNotFoundError:
-        print("Error: cafe_context.md not found.")
-        return None
-
-    # 2. Define the initial state for the workflow
+    # 1. Define the initial state for the workflow
     initial_state = AgentState(
         cafe_context=cafe_context,
         weather_summary=None,
@@ -40,13 +32,13 @@ def run_workflow():
 
     print("🚀 Starting AI Marketing Assistant Workflow...")
 
-    # 3. Invoke the graph
+    # 2. Invoke the graph
     final_state = app.invoke(initial_state)
 
     print("\n🏁 Workflow Finished.")
     print("--------------------")
 
-    # 4. Check for errors and get the final brief
+    # 3. Check for errors and get the final brief
     if not final_state:
         print("❌ Workflow failed to return a final state.")
         return None
@@ -65,13 +57,17 @@ def run_workflow():
         return None
 
     print("Final post generated successfully.")
-    # 5. Call the notifier to send the post to Discord
+    # 4. Call the notifier to send the post to Discord
     send_to_discord(brief)
     
-    # 6. Return the final brief for the UI
+    # 5. Return the final brief for the UI
     return brief
 
 # This allows us to run the workflow directly from the terminal
-# for testing purposes before we build the UI.
 if __name__ == "__main__":
-    run_workflow()
+    try:
+        with open("cafe_context.md", "r", encoding="utf-8") as f:
+            context = f.read()
+        run_workflow(context)
+    except FileNotFoundError:
+        print("Error: cafe_context.md not found.")

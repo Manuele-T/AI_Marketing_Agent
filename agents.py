@@ -46,7 +46,7 @@ def scout_node(state: AgentState) -> AgentState:
         "conferences in Glasgow today"
     ]
     
-    # Real RSS feeds for Glasgow news, events, and culture
+    # RSS feeds for Glasgow news, events, and culture
     rss_feed_urls = [
         "http://feeds.bbci.co.uk/news/scotland/rss.xml", # BBC News Scotland
         "https://www.glasgowlive.co.uk/rss.xml",          # Glasgow Live
@@ -76,7 +76,7 @@ def scout_node(state: AgentState) -> AgentState:
 
     # 4. Create the detailed prompt for the LLM
     prompt = f"""
-    You are an expert Local Opportunity Scout for a small, cozy cafe in Glasgow called "Glasgow Cozy Bean".
+    You are an expert Local Opportunity Scout for a small, cozy cafe in Glasgow.
 
     Your mission is to analyze the raw data provided below and extract the weather summary and the top 5 most important events of the day, including their postcodes.
 
