@@ -25,45 +25,51 @@ def run_workflow():
             cafe_context = f.read()
     except FileNotFoundError:
         print("Error: cafe_context.md not found.")
-        return
+        return None
 
     # 2. Define the initial state for the workflow
-    # This is the input that kicks off the graph.
     initial_state = AgentState(
         cafe_context=cafe_context,
         weather_summary=None,
         food_recommendation=None,
         events=None,
         message_ideas=None,
-        final_social_post=None,
+        brief=None,
         errors=[]
     )
 
     print("🚀 Starting AI Marketing Assistant Workflow...")
 
-    # 3. Invoke the graph to run the full agent process
-    # The `app` object is our compiled workflow from graph.py
+    # 3. Invoke the graph
     final_state = app.invoke(initial_state)
 
     print("\n🏁 Workflow Finished.")
     print("--------------------")
 
-    # 4. Check the final state and send notification
+    # 4. Check for errors and get the final brief
     if not final_state:
         print("❌ Workflow failed to return a final state.")
-        return
+        return None
 
     errors = final_state.get("errors", [])
+    brief = final_state.get("brief")
+
     if errors:
         print("\nErrors encountered:")
         for error in errors:
             print(f"- {error}")
-    else:
-        print("Final post generated successfully.")
-        # 5. Call the notifier to send the post to Discord
-        send_to_discord(final_state)
+        return None # Return None if there were errors
     
-    return final_state
+    if not brief:
+        print("\n❌ Workflow finished, but no brief was generated.")
+        return None
+
+    print("Final post generated successfully.")
+    # 5. Call the notifier to send the post to Discord
+    send_to_discord(brief)
+    
+    # 6. Return the final brief for the UI
+    return brief
 
 # This allows us to run the workflow directly from the terminal
 # for testing purposes before we build the UI.

@@ -8,7 +8,7 @@ flow of data and control from the Scout, to the Strategist, to the Creator.
 
 from langgraph.graph import StateGraph, END
 from state import AgentState
-from agents import scout_node, strategist_node
+from agents import scout_node, strategist_node, creator_node
 
 # 1. Create a new StateGraph with our AgentState
 workflow = StateGraph(AgentState)
@@ -17,14 +17,16 @@ workflow = StateGraph(AgentState)
 # Each node corresponds to a function we defined in agents.py
 workflow.add_node("scout", scout_node)
 workflow.add_node("strategist", strategist_node)
+workflow.add_node("creator", creator_node)
 
 # 3. Define the edges that control the flow
 # This is a simple, linear workflow.
 workflow.set_entry_point("scout")
 workflow.add_edge("scout", "strategist")
+workflow.add_edge("strategist", "creator")
 
-# The strategist_node is the final step, so we add an edge from it to the END
-workflow.add_edge("strategist", END)
+# The creator_node is the final step, so we add an edge from it to the END
+workflow.add_edge("creator", END)
 
 # 4. Compile the graph into a runnable application
 # This creates the final, executable object.

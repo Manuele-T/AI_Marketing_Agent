@@ -1,6 +1,34 @@
 ## AI Marketing Assistant for Small Business
 
-A **multi-agent AI application** designed to act as an autonomous marketing assistant for small businesses, such as local cafes. Built with **LangGraph** and the **OpenAI API**, this system automates the creation of timely, on-brand social media content by analyzing real-time local data.
+![First screenshot](./screenshots/01.jpg)
+
+
+A **multi-agent AI application** that functions as an autonomous marketing assistant for small businesses, such as local cafes, tackling the daily challenge of creating timely, relevant, and on-brand social media content. Built with **LangGraph** and the **OpenAI API**, this system orchestrates a virtual marketing team of specialized AI agents to deliver a rich, actionable brief every day.
+
+---
+
+### The Three-Agent Workflow
+
+The system transforms a complex, time-consuming creative task into a one-click process, delivering a set of customized and strategically aligned marketing ideas directly to the business owner.
+
+#### 1. The 'Scout' Agent (Eyes & Ears)
+* **Role**: Acts as the team's eyes and ears, scanning **real-time local data**.
+* **Action**: Scans **weather forecasts**, news from **RSS feeds**, and multiple targeted **Google searches** for local events and conferences.
+* **Output**: Compiles these findings into a concise brief of the day's key opportunities.
+
+#### 2. The 'Strategist' Agent (The Brain)
+* **Role**: The brain of the operation, providing strategic direction.
+* **Action**: Analyzes the Scout's brief and cross-references it with an internal, **user-editable "Marketing Playbook."**
+* **Output**: Formulates a high-level creative plan, deciding which opportunities to target and issuing specific instructions for the type of content to be created.
+
+#### 3. The 'Creator' Agent (Execution)
+* **Role**: Executes the strategic plan and assembles the final product.
+* **Action**: Takes the Strategist's instructions and assembles the final, polished output.
+* **Output**: A comprehensive **Daily Marketing Brief**, complete with:
+    * One fully-formed post based on the day's **weather**.
+    * Five distinct, **actionable post ideas** for the most relevant local events.
+
+![Third screenshot](./screenshots/03.jpg)
 
 -----
 
@@ -13,6 +41,9 @@ A **multi-agent AI application** designed to act as an autonomous marketing assi
   * **Automated Discord Notifications**: Sends the final, gracefully formatted brief directly to a **Discord channel** for easy review and approval.
 
 -----
+
+![Fourth screenshot](./screenshots/04.jpg)
+
 
 ## Tech Stack & Tools
 
@@ -126,7 +157,7 @@ Open your browser and navigate to the local URL provided by Streamlit, typically
 
 -----
 
-## Project Structure 📁
+## Project Structure
 
 The project is organized into modular, single-responsibility files:
 

@@ -14,7 +14,7 @@ class AgentState(TypedDict):
         food_recommendation: A food recommendation based on the weather.
         events: A list of the top 5 events of the day, each with a title and postcode.
         message_ideas: A list of 5 message ideas, one for each event.
-        final_social_post: The final, ready-to-publish social media post.
+        brief: The final, structured marketing brief.
         errors: A list to accumulate any errors that occur during the workflow.
     """
     cafe_context: str
@@ -22,5 +22,5 @@ class AgentState(TypedDict):
     food_recommendation: Optional[str]
     events: Optional[List[Dict[str, str]]]
     message_ideas: Optional[List[str]]
-    final_social_post: Optional[dict]
+    brief: Optional[dict]
     errors: List[str]
