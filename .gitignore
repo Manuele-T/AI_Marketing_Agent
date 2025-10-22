@@ -9,3 +9,4 @@ __pycache__/*
 workflow_graph.png
 
 .venv/
+.DS_Store
