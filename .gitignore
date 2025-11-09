@@ -7,3 +7,6 @@ Project_description.md
 .aiexclude
 __pycache__/*
 workflow_graph.png
+
+.venv/
+.DS_Store
