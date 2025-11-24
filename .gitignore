@@ -2,11 +2,11 @@
 target/
 venv/
 .env
-GEMINI.md
-Project_description.md
+# Project_description.md
 .aiexclude
 __pycache__/*
 workflow_graph.png
 
 .venv/
 .DS_Store
+.github

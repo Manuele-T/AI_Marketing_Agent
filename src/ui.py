@@ -9,7 +9,7 @@ It allows users to:
 """
 
 import streamlit as st
-from app import run_workflow
+from src.app import run_workflow
 
 # --- Page Configuration ---
 st.set_page_config(

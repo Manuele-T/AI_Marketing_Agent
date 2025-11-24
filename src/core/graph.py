@@ -7,7 +7,7 @@ flow of data and control from the Scout, to the Strategist, to the Creator.
 """
 
 from langgraph.graph import StateGraph, END
-from state import AgentState
+from src.core.state import AgentState
 from agents import scout_node, strategist_node, creator_node
 
 # 1. Create a new StateGraph with our AgentState

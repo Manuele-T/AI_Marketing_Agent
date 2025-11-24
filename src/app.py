@@ -11,9 +11,9 @@ This script does the following:
 6.  If successful, it calls the notifier to send the post to Discord.
 """
 
-from graph import app
-from state import AgentState
-from notifier import send_to_discord
+from src.core.graph import app
+from src.core.state import AgentState
+from src.tools.notifier import send_to_discord
 
 def run_workflow(cafe_context: str):
     """

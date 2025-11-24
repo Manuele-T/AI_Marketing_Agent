@@ -9,8 +9,8 @@ import json
 from langchain_openai import ChatOpenAI
 
 # Import state and tools
-from state import AgentState
-from tools import get_weather, perform_internet_search, parse_rss_feeds
+from src.core.state import AgentState
+from src.tools.tools import get_weather, perform_internet_search, parse_rss_feeds
 
 
 # Initialize the LLM
