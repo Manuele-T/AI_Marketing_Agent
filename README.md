@@ -153,20 +153,26 @@ Open your browser and navigate to the local URL provided by Streamlit, typically
 -----
 ## Project Structure
 
-The project is organized into modular, single-responsibility files:
-
 ```
-ai-marketing-agent/
-├── .env                  # Local environment variables (API keys) - Not committed to Git
-├── .gitignore            # Specifies files to ignore for Git
-├── README.md             # This file
-├── requirements.txt      # Project dependencies for pip
-├── agents.py             # Contains the core agent logic (Scout, Strategist, Creator)
-├── app.py                # Main application runner that invokes the graph
-├── cafe_context.md       # The user-editable marketing playbook
-├── graph.py              # Defines and compiles the LangGraph workflow
-├── notifier.py           # Sends the final brief to Discord
-├── state.py              # Defines the shared AgentState for the graph
-├── tools.py              # Functions for external API calls
-└── ui.py                 # The Streamlit user interface code
+
+├── src
+│   ├── agents
+│   │   ├── __init__.py
+│   │   ├── creator.py
+│   │   ├── scout.py
+│   │   └── strategist.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── graph.py
+│   │   └── state.py
+│   ├── tools
+│   │   ├── __init__.py
+│   │   ├── notifier.py
+│   │   └── tools.py
+│   ├── __init__.py
+│   └── app.py
+├── cafe_context.md
+├── README.md
+├── requirements.txt
+└── ui.py
 ```
