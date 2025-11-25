@@ -1,26 +1,23 @@
-# graph.py
-"""
-This file defines and compiles the LangGraph workflow.
-
-It assembles the individual agent nodes into a sequential graph, defining the
-flow of data and control from the Scout, to the Strategist, to the Creator.
-"""
-
 from langgraph.graph import StateGraph, END
-from src.core.state import AgentState
-from agents import scout_node, strategist_node, creator_node
+
+# --- FIX: USE RELATIVE IMPORTS ---
+# Use a dot (.) to say "from the file in this same folder"
+from .state import AgentState
+
+# Use two dots (..) to say "go up one folder (to src), then into agents"
+from ..agents.scout import scout_node
+from ..agents.strategist import strategist_node
+from ..agents.creator import creator_node
 
 # 1. Create a new StateGraph with our AgentState
 workflow = StateGraph(AgentState)
 
 # 2. Add the agent nodes to the graph
-# Each node corresponds to a function we defined in agents.py
 workflow.add_node("scout", scout_node)
 workflow.add_node("strategist", strategist_node)
 workflow.add_node("creator", creator_node)
 
 # 3. Define the edges that control the flow
-# This is a simple, linear workflow.
 workflow.set_entry_point("scout")
 workflow.add_edge("scout", "strategist")
 workflow.add_edge("strategist", "creator")
@@ -29,20 +26,16 @@ workflow.add_edge("strategist", "creator")
 workflow.add_edge("creator", END)
 
 # 4. Compile the graph into a runnable application
-# This creates the final, executable object.
 app = workflow.compile()
 
-# 5. (Optional but Recommended) Generate a visualization of the graph
-# This will create a PNG file that shows the structure of your agent workflow.
-# You must have pygraphviz and graphviz installed for this to work.
-try:
-    # Get the graph as a bytes object
-    image_bytes = app.get_graph().draw_png()  # type: ignore
-
-    # Write the bytes to a file
-    with open("workflow_graph.png", "wb") as f:
-        f.write(image_bytes)
-    print("Successfully generated workflow_graph.png")
-
-except Exception as e:
-    print(f"Warning: Could not generate graph visualization. Make sure Graphviz is installed. Error: {e}")
+# 5. (Optional) Generate a visualization
+# Note: To run this specific block to generate the image, you must run from the root:
+# python -m src.core.graph
+if __name__ == "__main__":
+    try:
+        image_bytes = app.get_graph().draw_png() # type: ignore
+        with open("workflow_graph.png", "wb") as f:
+            f.write(image_bytes)
+        print("Successfully generated workflow_graph.png")
+    except Exception as e:
+        print(f"Warning: Could not generate graph visualization. Make sure Graphviz is installed. Error: {e}")
